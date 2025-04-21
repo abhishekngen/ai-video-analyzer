@@ -1,0 +1,8 @@
+frames/*
+video_downloads/*
+*.mp4
+.env
+.idea
+.venv
+*.pyc
+.DS_store
