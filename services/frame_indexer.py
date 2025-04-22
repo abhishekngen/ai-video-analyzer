@@ -8,16 +8,18 @@ from clients.openai_client import OpenAIClient
 
 
 class FrameIndexer:
-    def __init__(self, openai_client: OpenAIClient, chroma_client: ChromaClient, frames_dir: str, fps: int = 1):
+    def __init__(self, openai_client: OpenAIClient, chroma_client: ChromaClient, frames_dir: str, vector_db_collection_name: str, fps: int = 1):
         self._ai = openai_client
         self._vector_db = chroma_client
         self._captioner = Captioner(openai_client)
         self.frames_dir = frames_dir
+        self.vector_db_collection_name = vector_db_collection_name
         self.fps = fps
 
     def index_frames(self):
         captions = []
-        for frame_path in tqdm(Path(self.frames_dir).glob("*.jpg"), desc="Indexing frames"):
+        frame_files = sorted(Path(self.frames_dir).glob("*.jpg"))
+        for frame_path in tqdm(frame_files, desc="Indexing frames", total=len(frame_files)):
             caption = self._captioner.caption_image(frame_path, captions)
             self.index_frame(frame_path, caption)
             captions = [caption]
@@ -34,7 +36,8 @@ class FrameIndexer:
         }
 
         self._vector_db.add_item_to_collection(
-            id=frame_id,
+            collection_name=self.vector_db_collection_name,
+            item_id=frame_id,
             embedding=frame_embedding,
             item=caption,
             metadata=metadata

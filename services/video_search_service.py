@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from clients.chroma_client import ChromaClient
 from services.frame_extractor import FrameExtractor
 from services.frame_indexer import FrameIndexer
@@ -10,11 +12,12 @@ class VideoSearchService:
         self.ai = openai_client
         self.chroma = chroma_client
         self.youtube = youtube_client
+        self.vector_db_collection_name = None
 
     def run_download_and_index_video(self):
         video_url = input("Enter the YouTube video URL: ")
         print("Downloading video...")
-        video_path = self.youtube.download_video(video_url)
+        video_path, _, video_id = self.youtube.download_video(video_url)
         print(f"Video downloaded to {video_path}.")
         #
         fps = 1  # Extract one frame per second
@@ -27,9 +30,18 @@ class VideoSearchService:
 
         print(f"Frames extracted to {frames_dir}")
 
+        self.vector_db_collection_name = video_id
+        vector_db_collection = self.chroma.get_collection(self.vector_db_collection_name)
+        if vector_db_collection is not None:
+            query = input("Collection already exists. Do you want to skip overwriting it? (Y/n): ")
+            if query.strip().lower() == "y":
+                return
+        else:
+            self.chroma.create_collection(self.vector_db_collection_name)
+
         print("Indexing frames...")
 
-        frame_indexer = FrameIndexer(self.ai, self.chroma, frames_dir, fps)
+        frame_indexer = FrameIndexer(self.ai, self.chroma, frames_dir, self.vector_db_collection_name, fps)
         frame_indexer.index_frames()
 
         print("Video frames indexed.")
@@ -47,7 +59,7 @@ class VideoSearchService:
 
             query_embedding = self.ai.embed_text(query)
 
-            results = self.chroma.query_embedding(query_embedding, 5, ["documents", "metadatas"])
+            results = self.chroma.query_embedding(self.vector_db_collection_name, query_embedding, 5, ["documents", "metadatas"])
 
             context_str = self.generate_context_string(results)
 

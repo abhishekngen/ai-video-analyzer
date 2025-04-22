@@ -6,3 +6,4 @@ video_downloads/*
 .venv
 *.pyc
 .DS_store
+chroma/*
