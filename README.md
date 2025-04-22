@@ -14,3 +14,5 @@ pip install -r requirements.txt
 ```
 3. Generate an OpenAI API key [here](https://openai.com/api/), and create a .env file with the key, similar to how it is done in `.env.example`
 4. Run the terminal app, i.e. `python main.py`.
+
+The program creates a `chroma` folder in the working directory, where the Chroma Vector DB gets persisted.
