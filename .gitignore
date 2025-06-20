@@ -7,3 +7,4 @@ video_downloads/*
 *.pyc
 .DS_store
 chroma/*
+agent_chroma/*

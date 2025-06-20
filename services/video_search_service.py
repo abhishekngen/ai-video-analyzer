@@ -92,6 +92,6 @@ class VideoSearchService:
             Search Results:
             {context_str}
 
-            Generate a concise response to the user query using the search results. Include timestamps for each result.
+            Generate a concise response to the user query about timestamps/timestamp ranges the query is relevant to as if you can watch the video, using the top search results as reference.
             """
         )

@@ -15,4 +15,5 @@ class YoutubeClient:
 
         ys = yt.streams.get_highest_resolution()
         downloaded_video_dir = ys.download(output_path=str(video_dir))
+        print(yt.caption_tracks)
         return downloaded_video_dir, yt.title, yt.video_id
