@@ -13,6 +13,8 @@ brew install ffmpeg
 pip install -r requirements.txt
 ```
 3. Generate an OpenAI API key [here](https://openai.com/api/), and create a .env file with the key, similar to how it is done in `.env.example`
-4. Run the terminal app, i.e. `python main.py`.
+4. Run the terminal app, i.e. `python main.py`
+   OR run it in agent mode using `python agent.py`.
+   In agent mode the agent will autonomously call upon tools for searching through Youtube videos, indexing and analysing them, as well as     reviewing already downloaded videos and various metadata.
 
 The program creates a `chroma` folder in the working directory, where the Chroma Vector DB gets persisted.
