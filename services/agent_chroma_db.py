@@ -60,8 +60,8 @@ class ImageChromaDB:
                 pixels = img.getdata()
                 ascii_str = "".join(chars[pixel * (len(chars) - 1) // 255] for pixel in pixels)
 
-                for i in range(0, len(ascii_str), width):
-                    print(ascii_str[i:i + width])
+                # for i in range(0, len(ascii_str), width):
+                #     print(ascii_str[i:i + width])
             return ([{"type": "input_image",
                       "image_url": f"data:image/jpeg;base64,{base64.b64encode(open(uri, 'rb').read()).decode('utf-8')}"}
                      for uri in results['uris'][0]], results['metadatas'][0])

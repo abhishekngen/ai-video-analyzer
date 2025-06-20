@@ -195,6 +195,7 @@ tools = [
 # Chat state
 previous_response_id = None
 
+print("""Welcome to the YouTube Video Search Assistant! You can search for videos using natural language (or specify URLs), and I can download them and answer any visual content queries you have, including timestamps of certain moments and more.""")
 print("Start chatting (Ctrl+C to exit):")
 while True:
     inputs = []
